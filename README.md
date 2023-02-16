@@ -2,7 +2,7 @@
 
 how to use on limelight:
 * to put the actual vision code on the limelight go to the limelights python editor and copy paste the code there
-* be sure to edit code in april_tags_limelight_code.py and copy to limelight python editor as copying from the limelight python editor makes it crash somehow
+* be sure to edit code in limelight_code.py and copy to limelight python editor as copying from the limelight python editor makes it crash somehow
 * choosing a threshold:
     - take a picture of what you want to track and save it as "thr.jpg" in this folder
     - run limelight_median_thr.py and mark the object you want to track using the cursor
@@ -16,6 +16,9 @@ how to use on limelight:
 important notes / conventions:
 * ports:
     - 5800 - the port where you send the robot's current location using UDP, the limelight sends the data and the robot recieves it, data is sent in this format (x, y, z) all floats
+    - 5801 - the port where you send the locations of all game pieces to the simulation
+    - 5802 - the port where you send the location of the locked on reflector from the limelight to the robot
+    - 5804 - the port where the robot sends his current location and rotation to the simulation
 * all measurements are and should always be in meters
 * constant physical values should be changed in april_tags.py
 * (x, y, z) raw readings (direct calculations relative only to the camers) go like this: 

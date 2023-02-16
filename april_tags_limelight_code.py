@@ -8,15 +8,17 @@ import numpy as np
 import april_tags
 from pupil_apriltags import Detector
 
-# this code goes on the actual limelight's costume pipeline code section
+# this code is only for the april tags
 
 at_detector = Detector(families="tag16h5", quad_sigma=0.8, decode_sharpening=0.4)
 tags_pipe = gbv.ColorThreshold([[0, 255], [0, 255], [55, 255]], 'HSV') + gbv.Erode(1, 4) + gbv.Dilate(1, 4) 
 robot_location_port = 5800
+last_robot_location = [0, 0, 0]
 
 def runPipeline(image, llrobot):
     global at_detector
     global tags_pipe
+    global last_robot_location
     global robot_location_port
     
     
@@ -42,8 +44,13 @@ def runPipeline(image, llrobot):
             tags_points.append(tag_xyz)
         except:
             pass
-        
-    robot_location = april_tags.vectors_average(robot_locations) # average aproximation of robot location
+    
+    if robot_location == []:
+        robot_location = april_tags.vectors_average(robot_locations) # average aproximation of robot location
+    else:
+        # TODO: add code for using reflectors instead
+        # temp
+        robot_location = last_robot_location 
     
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP) as sock:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
@@ -51,6 +58,7 @@ def runPipeline(image, llrobot):
                                        robot_location[1],
                                        robot_location[2]),
                     ("255.255.255.255", robot_location_port))
+    last_robot_location = robot_location
     
     
     return [], frame, robot_location

@@ -12,11 +12,12 @@ TAGS_CORNERS_HEIGHTS = [TAG_HEIGHT_FROM_FLOOR + TAG_SIDE_LENGTH - CAM_HEIGHT,
                 TAG_HEIGHT_FROM_FLOOR - CAM_HEIGHT,
                 TAG_HEIGHT_FROM_FLOOR - CAM_HEIGHT,
                 TAG_HEIGHT_FROM_FLOOR + TAG_SIDE_LENGTH - CAM_HEIGHT]
+
+LIMELIGHT_FOV_W =  59.6 
+LIMELIGHT_FOV_H = 45.7 
 # focal length x and focal length y can be written:
 # focal_length_x = 2 * tan(fov_width/2)
 # focal_length_y = 2 * tan(fov_height/2)
-LIMELIGHT_FOV_W =  59.6 
-LIMELIGHT_FOV_H = 45.7 
 # focal length is expressed as the ratio between the sensor and the actual focal length
 LIMELIGHT_FOCAL_LENGTH_X = 2 * math.tan(math.radians(LIMELIGHT_FOV_W)/2)
 LIMELIGHT_FOCAL_LENGTH_Y = 2 * math.tan(math.radians(LIMELIGHT_FOV_H)/2)
@@ -25,16 +26,16 @@ FRAME_WIDTH = 960
 FRAME_HEIGHT = 720
 
 
-ID_FIELD_LOCATIONS_OFFSETS = [827.0494, 18.22 * 2.54, 42.19  * 2.54]
+ID_FIELD_LOCATIONS_OFFSETS = [827.0494 / 100, 18.22 * 2.54 / 100, 42.19  * 2.54 / 100]
 ID_FIELD_LOCATIONS = {
-    1: [610.77 * 2.54, 18.22 * 2.54, 42.19  * 2.54],
-    2: [610.77 * 2.54, 18.22 * 2.54, 108.19 * 2.54],
-    3: [610.77 * 2.54, 18.22 * 2.54, 174.19 * 2.54],
-    4: [636.96 * 2.54, 27.38 * 2.54, 265.74 * 2.54],
-    5: [14.25  * 2.54, 27.3  * 2.54, 265.74 * 2.54],
-    6: [40.45  * 2.54, 18.2  * 2.54, 174.19 * 2.54],
-    7: [40.45  * 2.54, 18.2  * 2.54, 108.19 * 2.54],
-    8: [40.45  * 2.54, 18.22 * 2.54, 42.19  * 2.54] 
+    1: [610.77 * 2.54 / 100, 18.22 * 2.54 / 100, 42.19  * 2.54 / 100],
+    2: [610.77 * 2.54 / 100, 18.22 * 2.54 / 100, 108.19 * 2.54 / 100],
+    3: [610.77 * 2.54 / 100, 18.22 * 2.54 / 100, 174.19 * 2.54 / 100],
+    4: [636.96 * 2.54 / 100, 27.38 * 2.54 / 100, 265.74 * 2.54 / 100],
+    5: [14.25  * 2.54 / 100, 27.3  * 2.54 / 100, 265.74 * 2.54 / 100],
+    6: [40.45  * 2.54 / 100, 18.2  * 2.54 / 100, 174.19 * 2.54 / 100],
+    7: [40.45  * 2.54 / 100, 18.2  * 2.54 / 100, 108.19 * 2.54 / 100],
+    8: [40.45  * 2.54 / 100, 18.22 * 2.54 / 100, 42.19  * 2.54 / 100] 
 }
 # let T be the function from the real life coordinates to the frame
 # T: 3D space ---> 2D frame |  T(x, y, z) = (width * (x/(focal_length_x*z) + 0.5), height * (y/(focal_length_y*z) + 0.5))
@@ -108,11 +109,11 @@ def draw_tags(image, tags):
         corner_02 = (int(corners[1][0]), int(corners[1][1]))
         corner_03 = (int(corners[2][0]), int(corners[2][1]))
         corner_04 = (int(corners[3][0]), int(corners[3][1]))
-        line1_center = (int(line1_center[0]), int(line1_center[1]))
-        line2_center = (int(line2_center[0]), int(line2_center[1]))
+        # line1_center = (int(line1_center[0]), int(line1_center[1]))
+        # line2_center = (int(line2_center[0]), int(line2_center[1]))
         cv.circle(image, (center[0], center[1]), 5, (0, 0, 255), 2)
-        cv.circle(image, (line2_center[0], line2_center[1]), 5, (0, 255, 0), 2)
-        cv.circle(image, (line1_center[0], line1_center[1]), 5, (0, 0, 255), 2)
+        # cv.circle(image, (line2_center[0], line2_center[1]), 5, (0, 255, 0), 2)
+        # cv.circle(image, (line1_center[0], line1_center[1]), 5, (0, 0, 255), 2)
         cv.putText(image, str(tag_id), (center[0] - 10, center[1] - 10),
             cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv.LINE_AA)
         cv.line(image, (corner_01[0], corner_01[1]),
