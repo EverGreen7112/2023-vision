@@ -10,13 +10,13 @@ from pupil_apriltags import Detector
 
 # this code is only for the april tags
 
-at_detector = Detector(families="tag16h5", quad_sigma=0.8, decode_sharpening=0.4)
+# at_detector = Detector(families="tag16h5", quad_sigma=0.8, decode_sharpening=0.4)
 tags_pipe = gbv.ColorThreshold([[0, 255], [0, 255], [55, 255]], 'HSV') + gbv.Erode(1, 4) + gbv.Dilate(1, 4) 
 robot_location_port = 5800
 last_robot_location = [0, 0, 0]
 
 def runPipeline(image, llrobot):
-    global at_detector
+    # global at_detector
     global tags_pipe
     global last_robot_location
     global robot_location_port
@@ -31,6 +31,7 @@ def runPipeline(image, llrobot):
         camera_params=None,
         tag_size=None,
     )
+    
     frame = april_tags.draw_tags(image, tags)
     tags_points = [] # xyz of each corners of the tag in real life
     robot_locations = [] # all aproximations of robot locations
