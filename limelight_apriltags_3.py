@@ -1,51 +1,21 @@
+import copy
 import math
 import socket
 import struct
-import copy
-import gbvision as gbv
 import cv2 as cv
 import numpy as np
-import april_tags
+import april_tags2 as ap2
+import gbvision as gbv
 import send_game_pieces
-
-# this code goes on the actual limelight's costume pipeline code section
-
-tags_pipe = gbv.ColorThreshold([[0, 255], [0, 255], [55, 255]], 'HSV') + gbv.Erode(1, 4) + gbv.Dilate(1, 4) 
 robot_location_port = 5800
 reflector_port = 5802
-last_robot_location = [0, 0, 0]
-dictionary = cv.aruco.getPredefinedDictionary(cv.aruco.DICT_APRILTAG_16H5)
-parameters =  cv.aruco.DetectorParameters()
-detector = cv.aruco.ArucoDetector(dictionary, parameters)
-
+robot_location = [0, 0, 0]
 def runPipeline(image, llrobot):
-    global detector
-    global tags_pipe
-    global last_robot_location
-    global robot_location_port
-    global reflector_port
-    
-    
-    frame = copy.deepcopy(image) # copy of original image
-    image = tags_pipe(image)
-    corners, ids, rejected = detector.detectMarkers(image)
-    # tags_points = [] # xyz of each corners of the tag in real life
-    robot_locations = [[0.0,0.0,0.0]] # all aproximations of robot locations
-    robot_location = [0.0, 0.0, 0.0]
-    for i in range(len(corners)):
-        tag = Tag(corners[i][0], ids[i][0])
-        frame = april_tags.draw_tag(frame, tag)
-        corners = tag.corners
-        # tag_xyz = april_tags.calc_tag_points_location(corners, april_tags.TAGS_CORNERS_HEIGHTS,
-        #                                                         april_tags.LIMELIGHT_FOCAL_LENGTH_X, april_tags.LIMELIGHT_FOCAL_LENGTH_Y,
-        #                                                         april_tags.FRAME_WIDTH, april_tags.FRAME_HEIGHT)
-        try:
-            # robot_locations.append(april_tags.get_robot_location(corners, tag.tag_id))
-            # robot_location = april_tags.get_robot_location(corners, tag.tag_id)
-            robot_location = april_tags.calc_tag_location(corners, tag.tag_id)
-            # tags_points.append(tag_xyz)
-        except:
-            pass
+    global robot_location_port, robot_location
+    frame = copy.deepcopy(image)
+    output, positions, rotations = ap2.pose_esitmation(frame)
+    if len(positions) > 0:
+        robot_location = ap2.vectors_average_3d(positions)
     reflector, cones, cubes, frame = get_reflector_cones_cubes(frame)
     # if robot_locations != []:
     #     robot_location = april_tags.vectors_average(robot_locations) # average aproximation of robot location
@@ -79,7 +49,6 @@ def runPipeline(image, llrobot):
                         ("255.255.255.255", send_game_pieces.port))
         except:
             pass
-    last_robot_location = robot_location
     
     
     return [], frame, robot_location
@@ -121,8 +90,8 @@ def get_reflector_cones_cubes(image):
         frame is the frame with the targets marked
         '''
         global reflectors_pipe, cones_pipe, cubes_pipe, cam
-        cam.width = april_tags.FRAME_WIDTH
-        cam.height = april_tags.FRAME_HEIGHT
+        cam.width = ap2.FRAME_WIDTH
+        cam.height = ap2.FRAME_HEIGHT
         
         # frame = copy.deepcopy(image)
         frame = image
@@ -174,4 +143,3 @@ def choose_reflector(reflectors):
         except:
             pass
         return closest_match.tolist()
-                        

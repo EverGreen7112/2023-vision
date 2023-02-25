@@ -48,7 +48,7 @@ def runPipeline(image, llrobot):
         except:
             pass
     reflector, cones, cubes, image = get_reflector_cones_cubes(debug_image)
-    frame = april_tags.draw_tags(image, tags)
+    frame = april_tags.draw_tag(image, tags)
     if robot_locations == []:
         robot_location = april_tags.vectors_average(robot_locations) # average aproximation of robot location
     elif (reflector is not None):

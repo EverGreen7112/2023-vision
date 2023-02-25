@@ -32,7 +32,7 @@ def runPipeline(image, llrobot):
         tag_size=None,
     )
     
-    frame = april_tags.draw_tags(image, tags)
+    frame = april_tags.draw_tag(image, tags)
     tags_points = [] # xyz of each corners of the tag in real life
     robot_locations = [] # all aproximations of robot locations
     for tag in tags:

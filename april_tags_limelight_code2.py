@@ -52,7 +52,7 @@ def runPipeline(image, llrobot):
         # cv.line(frame, (corner_04[0], corner_04[1]),
         #         (corner_01[0], corner_01[1]), (0, 255, 0), 2)
     # print(str(rejected))
-    frame = april_tags.draw_tags(frame, tags)
+    frame = april_tags.draw_tag(frame, tags)
     tags_points = [] # xyz of each corners of the tag in real life
     robot_locations = [] # all aproximations of robot locations
     for tag in tags:
@@ -61,7 +61,7 @@ def runPipeline(image, llrobot):
                                                                 april_tags.LIMELIGHT_FOCAL_LENGTH_X, april_tags.LIMELIGHT_FOCAL_LENGTH_Y,
                                                                 april_tags.FRAME_WIDTH, april_tags.FRAME_HEIGHT)
         try:
-            robot_locations.append(april_tags.get_robot_field_location_by_tag(tag_xyz, april_tags.ID_FIELD_LOCATIONS[tag.id], april_tags.ID_FIELD_LOCATIONS_OFFSETS))
+            robot_locations.append(april_tags.get_robot_field_location_by_tag(april_tags.vectors_average(tag_xyz), april_tags.ID_FIELD_LOCATIONS[tag.tag_id], april_tags.ID_FIELD_LOCATIONS_OFFSETS))
             tags_points.append(tag_xyz)
         except:
             pass

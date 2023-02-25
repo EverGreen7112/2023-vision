@@ -4,7 +4,7 @@ import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-class Main{
+class Main {
     public static void main(String[] args) {
         try{
             

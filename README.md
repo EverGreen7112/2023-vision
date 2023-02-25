@@ -11,7 +11,7 @@ how to use on limelight:
 * uploading new libraries: 
     - to upload libraries use sftp, you can use FileZila
     - host: 10.71.12.11 (limelights IP)| username: root | password: 7112| port: 22 (sftp standard)
-    - once connected go to usr/lib/python3.9/site-packages and upload the folder or file there
+    - once connected go to usr/lib/python3.10/site-packages and upload the folder or file there
 
 important notes / conventions:
 * ports:
