@@ -113,7 +113,10 @@ def pose_esitmation(frame):
             rot = cv2.Rodrigues(-np.array(rvec))[0]
             pos = rot @ tvec[0][0]
             # tags_locations.append(pos)
-            tags_locations.append(get_robot_field_location_by_tag(pos, ids[i][0], [0, 0, 0]))
+            try:
+                tags_locations.append(get_robot_field_location_by_tag(pos, ids[i][0], [0, 0, 0]))
+            except:
+                pass
             # # rotated_mat = AXIS_MATRIX
             # rotated_mat = rot[0] @ AXIS_MATRIX
             # # mat = (rot[0] @ TAG_MATRIX).tolist()
