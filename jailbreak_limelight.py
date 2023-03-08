@@ -35,6 +35,9 @@ def runPipeline(image, llrobot):
     print("changed sshd_config")
     
     
+    print("\n\n\n**********************************************\n" + 
+          "now turn the limelight completely off and turn it on again")
+    
     
     
     return None, None, None

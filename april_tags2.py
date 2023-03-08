@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import time
 
-CAM_HEIGHT = 0.60# estimate 
+CAM_HEIGHT = 1.25
 TAG_HEIGHT_FROM_FLOOR = 0.384175
 TAG_SIDE_LENGTH = 0.1524
 TAGS_CORNERS_HEIGHTS = [TAG_HEIGHT_FROM_FLOOR + TAG_SIDE_LENGTH - CAM_HEIGHT, 
@@ -150,7 +150,7 @@ def vectors_average_3d(vectors):
         return (sum / len(vectors)).tolist()
     except:
         return [0.0, 0.0, 0.0]
-def get_robot_field_location_by_tag(tag_location, id, offset):
+def get_robot_field_location_by_tag(tag_location, id, offset=[0,0,0]):
     '''
     gets the robots location on the field by tag points and tag field location
     :param tag_location: the xyz location in real life of the tag
@@ -158,7 +158,7 @@ def get_robot_field_location_by_tag(tag_location, id, offset):
     '''
     tag_in_field = ID_FIELD_LOCATIONS[id]
     xyz_t = np.array(tag_in_field) - np.array(offset)
-    return (xyz_t - np.array([tag_location[len(tag_location) - 1 - i] for i in range(len(tag_location))])).tolist()
+    return (xyz_t + np.array([tag_location[len(tag_location) - 1 - i] for i in range(len(tag_location))])).tolist()
 
 def draw_tag(image, tag_id, center, corners):
     # tag_family = tag.tag_family
@@ -205,27 +205,27 @@ def rotate(yaw, pitch, roll, matrix):
     :return: the rotated 3x3 matrix
     """
     
-    # Define the Euler rotation matrix
-    R_yaw = np.array([[np.cos(yaw), -np.sin(yaw), 0],
-                      [np.sin(yaw), np.cos(yaw), 0],
-                      [0, 0, 1]])
+    # # Define the Euler rotation matrix
+    # R_yaw = np.array([[np.cos(yaw), -np.sin(yaw), 0],
+    #                   [np.sin(yaw), np.cos(yaw), 0],
+    #                   [0, 0, 1]])
     
-    R_pitch = np.array([[np.cos(pitch), 0, np.sin(pitch)],
-                        [0, 1, 0],
-                        [-np.sin(pitch), 0, np.cos(pitch)]])
+    # R_pitch = np.array([[np.cos(pitch), 0, np.sin(pitch)],
+    #                     [0, 1, 0],
+    #                     [-np.sin(pitch), 0, np.cos(pitch)]])
     
-    R_roll = np.array([[1, 0, 0],
-                       [0, np.cos(roll), -np.sin(roll)],
-                       [0, np.sin(roll), np.cos(roll)]])
+    # R_roll = np.array([[1, 0, 0],
+    #                    [0, np.cos(roll), -np.sin(roll)],
+    #                    [0, np.sin(roll), np.cos(roll)]])
     
-    # Combine the three rotations
-    R = R_yaw @ R_pitch @ R_roll
-    # R = R_pitch @ R_yaw @ R_roll
+    # # Combine the three rotations
+    # R = R_yaw @ R_pitch @ R_roll
+    # # R = R_pitch @ R_yaw @ R_roll
     
-    # Apply the rotation to the matrix
-    rotated_matrix = R @ matrix
-    
-    return rotated_matrix     
+    # # Apply the rotation to the matrix
+    # rotated_matrix = R @ matrix
+    rot = cv2.Rodrigues(-np.array([yaw, pitch, roll]))[0]
+    return rot @ matrix   
 
 # def main():
 

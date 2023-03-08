@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import gbvision as gbv
-stdv = np.array([5, 40, 60])
+stdv = np.array([5, 30, 60])
 # stdv = np.array([0, 0, 0])
 
 
@@ -23,6 +23,7 @@ def main():
     hue = thr.__getitem__(0)[0]
     sat = thr.__getitem__(1)[0]
     val = thr.__getitem__(2)[0]
+    print(thr)
     print([hue, sat, val])
     cv2.destroyAllWindows()
 
